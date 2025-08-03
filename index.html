@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Church Media Operator Feedback</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4a6fa5;
+            --primary-dark: #2c3e50;
+            --primary-light: #f1f8ff;
+            --secondary-light: #e8f4fc;
+            --success-color: #d4edda;
+            --success-dark: #155724;
+            --border-color: #dde6f0;
+            --border-hover: #cbd5e0;
+            --text-primary: #333;
+            --text-secondary: #4a5568;
+            --shadow-light: rgba(0,0,0,0.05);
+            --shadow-medium: rgba(0,0,0,0.1);
+            --shadow-dark: rgba(74, 111, 165, 0.3);
+            --gradient-primary: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-dark) 100%);
+            --gradient-light: linear-gradient(135deg, #f5f7fa 0%, #e4edf5 100%);
+            --gradient-card: linear-gradient(135deg, var(--primary-light) 0%, #e1f0ff 100%);
+            --gradient-section: linear-gradient(135deg, var(--secondary-light) 0%, #d6eaf8 100%);
+            --gradient-success: linear-gradient(135deg, var(--success-color) 0%, #b8e9c7 100%);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Open+Sans', sans-serif;
+            background: var(--gradient-light);
+            color: var(--text-primary);
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px var(--shadow-medium);
+            overflow: hidden;
+        }
+
+        header {
+            background: var(--gradient-primary);
+            color: white;
+            padding: 25px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 1.9rem;
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .form-container {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 600;
+            color: var(--primary-dark);
+            font-size: 1.05rem;
+        }
+
+        input, select, textarea {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid var(--border-color);
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.2);
+            outline: none;
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .radio-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin-top: 5px;
+        }
+
+        .radio-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            background: #f8fafc;
+            border: 2px solid var(--border-color);
+            transition: all 0.2s ease;
+            cursor: pointer;
+            width: calc(50% - 10px);
+            position: relative;
+        }
+
+        .radio-item:hover {
+            background: #edf2f7;
+            border-color: var(--border-hover);
+        }
+
+        .radio-item input {
+            width: auto;
+            transform: scale(1.2);
+            margin-right: 8px;
+            position: absolute;
+            opacity: 0;
+            cursor: pointer;
+            height: 100%;
+            left: 0;
+            top: 0;
+            width: 100%;
+            z-index: 1;
+        }
+
+        .radio-item label {
+            margin: 0;
+            font-weight: 600;
+            color: var(--text-secondary);
+            cursor: pointer;
+            flex-grow: 1;
+            z-index: 2;
+            position: relative;
+        }
+
+        .radio-item.checked {
+            background: #dbeafe;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(74, 111, 165, 0.2);
+        }
+
+        .radio-item.checked label {
+            color: var(--primary-color);
+        }
+
+        .btn {
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            padding: 16px 25px;
+            font-size: 1.1rem;
+            border-radius: 8px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px var(--shadow-dark);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(74, 111, 165, 0.4);
+        }
+
+        .btn:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .success-message {
+            background: var(--gradient-success);
+            color: var(--success-dark);
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 25px;
+            display: none;
+            text-align: center;
+            font-weight: 600;
+            box-shadow: 0 4px 10px var(--shadow-light);
+        }
+
+        /* Slider Styles */
+        .slider-container {
+            background: var(--gradient-card);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px var(--shadow-light);
+        }
+
+        .slider-title {
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--primary-dark);
+            font-weight: 600;
+            font-size: 1.2rem;
+        }
+
+        .slider-wrapper {
+            position: relative;
+            margin: 25px 0;
+        }
+
+        .slider-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+        }
+
+        .slider-value {
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 15px 0;
+            background: white;
+            display: inline-block;
+            padding: 8px 20px;
+            border-radius: 30px;
+            box-shadow: 0 4px 10px var(--shadow-light);
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 10px;
+            border-radius: 5px;
+            background: #d1e0f0;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            cursor: pointer;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+            border: 3px solid white;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 0 10px rgba(0,0,0,0.3);
+            border: 3px solid white;
+        }
+
+        /* Quick Selections */
+        .quick-selection {
+            background: var(--gradient-section);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            box-shadow: 0 4px 15px var(--shadow-light);
+        }
+
+        .quick-selection h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: var(--primary-dark);
+            font-size: 1.4rem;
+        }
+
+        .quick-selection h3 {
+            margin: 20px 0 12px 0;
+            color: var(--primary-dark);
+            font-size: 1.1rem;
+            padding-bottom: 5px;
+            border-bottom: 2px solid rgba(74, 111, 165, 0.2);
+        }
+
+        .quick-selection textarea {
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Hidden timestamp field */
+        #timestamp {
+            display: none;
+        }
+
+        /* Clean section styling without borders */
+        fieldset {
+            border: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        legend {
+            padding: 0;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                border-radius: 0;
+                box-shadow: none;
+            }
+
+            body {
+                padding: 0;
+                background: #f8f9fa;
+            }
+
+            header {
+                padding: 20px 15px;
+            }
+
+            header h1 {
+                font-size: 1.6rem;
+            }
+
+            header p {
+                font-size: 1rem;
+            }
+
+            .form-container {
+                padding: 20px 15px;
+            }
+
+            .radio-group {
+                flex-direction: column;
+            }
+
+            .radio-item {
+                width: 100%;
+            }
+
+            .slider-container, .quick-selection {
+                padding: 20px 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Church Media Operator Feedback</h1>
+            <p>Complete this form after the first service to help improve the second service</p>
+        </header>
+        
+        <div class="form-container">
+            <form id="feedbackForm" novalidate>
+                <!-- Hidden timestamp field -->
+                <input type="hidden" id="timestamp" name="timestamp">
+                
+                <div class="form-group">
+                    <label for="operatorName">Operator Name</label>
+                    <input type="text" id="operatorName" name="operatorName" placeholder="Your name" required aria-describedby="name-error">
+                    <div id="name-error" class="error-message" role="alert" aria-live="polite"></div>
+                </div>
+                
+                <div class="form-group">
+                    <div class="quick-selection" role="group" aria-labelledby="quick-selections-heading">
+                        <h2 id="quick-selections-heading">Quick Selections</h2>
+                        <h3>Top 3 Issues</h3>
+                        <textarea name="topIssues" placeholder="List the 3 most significant issues encountered..."></textarea>
+                        
+                        <h3>Best Moment</h3>
+                        <textarea name="bestMoment" placeholder="What went exceptionally well during the service?"></textarea>
+                        
+                        <h3>Any Last-Minute Changes?</h3>
+                        <textarea name="lastMinuteChangesDetails" placeholder="Unexpected difficulties we hadn't anticipated..."></textarea>
+                        
+                        <h3>Key Learning</h3>
+                        <textarea name="keyLearning" placeholder="Most important takeaway for next time..."></textarea>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <fieldset>
+                        <legend>Any Technical Issues?</legend>
+                        <div class="radio-group" role="radiogroup" aria-required="true">
+                            <div class="radio-item" data-value="Yes">
+                                <input type="radio" id="techYes" name="technicalIssues" value="Yes" required>
+                                <label for="techYes">Yes</label>
+                            </div>
+                            <div class="radio-item" data-value="No">
+                                <input type="radio" id="techNo" name="technicalIssues" value="No" required>
+                                <label for="techNo">No</label>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <textarea id="techIssuesDetails" name="techIssuesDetails" placeholder="Please describe any technical issues..." aria-describedby="tech-error"></textarea>
+                    <div id="tech-error" class="error-message" role="alert" aria-live="polite"></div>
+                </div>
+                
+                <div class="form-group">
+                    <fieldset>
+                        <legend>Communication Issues?</legend>
+                        <div class="radio-group" role="radiogroup" aria-required="true">
+                            <div class="radio-item" data-value="Yes">
+                                <input type="radio" id="commYes" name="communicationIssues" value="Yes" required>
+                                <label for="commYes">Yes</label>
+                            </div>
+                            <div class="radio-item" data-value="No">
+                                <input type="radio" id="commNo" name="communicationIssues" value="No" required>
+                                <label for="commNo">No</label>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <textarea id="commIssuesDetails" name="commIssuesDetails" placeholder="Describe any communication problems..." aria-describedby="comm-error"></textarea>
+                    <div id="comm-error" class="error-message" role="alert" aria-live="polite"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="serviceRating">Overall Service Rating</label>
+                    <div class="slider-container">
+                        <div class="slider-title">Rate this service from 1 (poor) to 10 (excellent)</div>
+                        <div class="slider-value">
+                            Rating: <span id="ratingValue">5</span>/10
+                        </div>
+                        <div class="slider-wrapper">
+                            <input type="range" id="serviceRating" name="serviceRating" min="1" max="10" value="5" required aria-describedby="rating-error">
+                            <div class="slider-labels">
+                                <span>1 - Poor</span>
+                                <span>10 - Excellent</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="rating-error" class="error-message" role="alert" aria-live="polite"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="suggestions">Suggestions for Second Service</label>
+                    <textarea id="suggestions" name="suggestions" placeholder="What should we do differently for the second service?"></textarea>
+                </div>
+                
+                <button type="submit" class="btn">Submit Feedback</button>
+            </form>
+            
+            <div class="success-message" id="successMessage" role="alert" aria-live="polite">
+                Feedback submitted successfully! Thank you for helping improve our services.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // DOM Elements
+            const form = document.getElementById('feedbackForm');
+            const successMessage = document.getElementById('successMessage');
+            const slider = document.getElementById('serviceRating');
+            const sliderValue = document.getElementById('ratingValue');
+            const radioItems = document.querySelectorAll('.radio-item');
+            const techIssuesDetails = document.getElementById('techIssuesDetails');
+            const commIssuesDetails = document.getElementById('commIssuesDetails');
+            const timestampField = document.getElementById('timestamp');
+            
+            // YOUR GOOGLE APPS SCRIPT WEB APP URL
+            const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxn7qrvLXXC_41hKbh_So-FFAL08GV_4Y_JXcwlpIwFagdrsgRSqpvZYcNPwbeba3Yp/exec';
+            
+            // Set timestamp when form loads
+            const now = new Date();
+            timestampField.value = now.toISOString();
+            
+            // Initialize form state
+            techIssuesDetails.style.display = 'none';
+            commIssuesDetails.style.display = 'none';
+            
+            // Slider functionality
+            slider.addEventListener('input', function() {
+                sliderValue.textContent = this.value;
+            });
+            
+            // Radio button functionality
+            radioItems.forEach(item => {
+                const input = item.querySelector('input');
+                
+                // Set initial state
+                if (input.checked) {
+                    item.classList.add('checked');
+                }
+                
+                // Handle clicks
+                item.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const value = this.dataset.value;
+                    const groupName = input.name;
+                    
+                    // Update radio state
+                    document.querySelectorAll(`input[name="${groupName}"]`).forEach(radio => {
+                        radio.checked = false;
+                        radio.parentElement.classList.remove('checked');
+                    });
+                    
+                    input.checked = true;
+                    this.classList.add('checked');
+                    
+                    // Show/hide detail fields
+                    if (groupName === 'technicalIssues') {
+                        techIssuesDetails.style.display = value === 'Yes' ? 'block' : 'none';
+                    } else if (groupName === 'communicationIssues') {
+                        commIssuesDetails.style.display = value === 'Yes' ? 'block' : 'none';
+                    }
+                });
+            });
+            
+            // Form submission
+            form.addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                // Simple validation
+                const operatorName = document.getElementById('operatorName').value.trim();
+                if (!operatorName) {
+                    alert('Please enter your name');
+                    return;
+                }
+                
+                // Collect form data
+                const formData = new FormData(form);
+                const data = {};
+                
+                // Convert FormData to regular object
+                for (let [key, value] of formData.entries()) {
+                    data[key] = value;
+                }
+                
+                // Send data to Google Apps Script
+                fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    body: JSON.stringify(data),
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                })
+                .then(response => response.json())
+                .then(result => {
+                    if (result.status === 'success') {
+                        // Show success message
+                        successMessage.style.display = 'block';
+                        
+                        // Reset form
+                        form.reset();
+                        sliderValue.textContent = '5';
+                        timestampField.value = new Date().toISOString();
+                        
+                        // Reset radio button styles
+                        radioItems.forEach(item => {
+                            item.classList.remove('checked');
+                        });
+                        
+                        // Hide detail fields
+                        techIssuesDetails.style.display = 'none';
+                        commIssuesDetails.style.display = 'none';
+                        
+                        // Scroll to top to show message
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    } else {
+                        alert('Error submitting form. Please try again.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error submitting form. Please try again.');
+                });
+            });
+        });
+    </script>
+</body>
+</html>
